@@ -82,7 +82,7 @@ package.products.append(
 package.dependencies.append(contentsOf: [
     .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.6.1"),
     .package(url: "https://github.com/pointfreeco/swift-parsing.git", from: "0.14.1"),
-    .package(url: "https://github.com/jpsim/Yams.git", from: "6.0.2")
+    .package(url: "https://github.com/nekrich/Yams.git", branch: "main")
 ])
 package.targets.append(contentsOf: [
     // Core Module

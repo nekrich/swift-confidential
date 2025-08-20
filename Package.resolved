@@ -1,4 +1,5 @@
 {
+  "originHash" : "799b33a5a0d8c2bbaee808557e64ca1b3e30783b04ef99929650386289609228",
   "pins" : [
     {
       "identity" : "swift-argument-parser",
@@ -41,19 +42,19 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/xctest-dynamic-overlay",
       "state" : {
-        "revision" : "39de59b2d47f7ef3ca88a039dff3084688fe27f4",
-        "version" : "1.5.2"
+        "revision" : "b2ed9eabefe56202ee4939dd9fc46b6241c88317",
+        "version" : "1.6.1"
       }
     },
     {
       "identity" : "yams",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/jpsim/Yams.git",
+      "location" : "https://github.com/nekrich/Yams.git",
       "state" : {
-        "revision" : "f4d4d6827d36092d151ad7f6fef1991c1b7192f6",
-        "version" : "6.0.2"
+        "branch" : "main",
+        "revision" : "34a620adced0c58dbbec8b2c4b9eda3d3d06c8a2"
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }
