@@ -6,11 +6,7 @@ extension AttributeSyntax {
         .init(
             attributeName: IdentifierTypeSyntax(name: .identifier("inline")),
             leftParen: .leftParenToken(),
-            arguments: .argumentList(
-                [
-                    LabeledExprSyntax(expression: DeclReferenceExprSyntax(baseName: .identifier("__always")))
-                ]
-            ),
+            arguments: .token(.identifier("__always")),
             rightParen: .rightParenToken()
         )
     }
