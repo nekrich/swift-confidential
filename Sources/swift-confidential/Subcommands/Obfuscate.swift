@@ -1,5 +1,5 @@
 import ArgumentParser
-import ConfidentialObfuscator
+import ConfidentialParsing
 import Foundation
 
 extension SwiftConfidential {
@@ -18,12 +18,14 @@ extension SwiftConfidential {
         )
 
         @Option(
+            name: [.long, .short],
             help: "The path to a Confidential configuration file.",
             transform: URL.init(fileURLWithPath:)
         )
         var configuration: URL
 
         @Option(
+            name: [.long, .short],
             help: "The path to an output source file where the generated Swift code is to be written.",
             transform: URL.init(fileURLWithPath:)
         )
@@ -37,13 +39,15 @@ extension SwiftConfidential {
             }
 
             let configurationYAML = try Data(contentsOf: configuration)
-            let obfuscatedText = try ConfidentialObfuscator.obfuscate(configurationData: configurationYAML)
+
+            let sourceFileText = try ConfidentialParser()
+                .parse(configurationYAML)
 
             guard fileManager.createFile(atPath: output.path, contents: .none) else {
                 throw RuntimeError(description: #"Failed to create output file at "\#(output.path)""#)
             }
 
-            try obfuscatedText.write(to: output, atomically: true, encoding: .utf8)
+            try sourceFileText.write(to: output)
         }
     }
 }

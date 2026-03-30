@@ -1,5 +1,6 @@
-// swift-tools-version: 5.9
+// swift-tools-version: 6.0
 
+import CompilerPluginSupport
 import PackageDescription
 
 var package = Package(
@@ -18,11 +19,36 @@ var package = Package(
             targets: ["ConfidentialKit"]
         )
     ],
+    dependencies: [
+        .package(url: "https://github.com/swiftlang/swift-syntax.git", "600.0.1"..<"604.0.0")
+    ],
     targets: [
+        // Core Module
+        .target(
+            name: "ConfidentialCore",
+            dependencies: [
+                "ConfidentialUtils"
+            ]
+        ),
+
         // Client Library
         .target(
             name: "ConfidentialKit",
-            dependencies: ["ConfidentialUtils"]
+            dependencies: [
+                "ConfidentialCore",
+                "ConfidentialKitMacros"
+            ]
+        ),
+
+        // Macros
+        .macro(
+            name: "ConfidentialKitMacros",
+            dependencies: [
+                "ConfidentialCore",
+                "ConfidentialUtils",
+                .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
+                .product(name: "SwiftCompilerPlugin", package: "swift-syntax")
+            ]
         ),
 
         // Utils
@@ -30,15 +56,24 @@ var package = Package(
 
         // Tests
         .testTarget(
-            name: "ConfidentialKitTests",
-            dependencies: ["ConfidentialKit"]
+            name: "ConfidentialCoreTests",
+            dependencies: ["ConfidentialCore"]
+        ),
+        .testTarget(
+            name: "ConfidentialKitMacrosTests",
+            dependencies: [
+                "ConfidentialCore",
+                "ConfidentialKitMacros",
+                "ConfidentialUtils",
+                .product(name: "SwiftSyntaxMacrosTestSupport", package: "swift-syntax")
+            ]
         ),
         .testTarget(
             name: "ConfidentialUtilsTests",
             dependencies: ["ConfidentialUtils"]
         )
     ],
-    swiftLanguageVersions: [.v5]
+    swiftLanguageModes: [.v5, .v6]
 )
 
 #if os(macOS)
@@ -49,30 +84,20 @@ package.products.append(
     )
 )
 package.dependencies.append(contentsOf: [
-    .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.6.1"),
-    .package(url: "https://github.com/swiftlang/swift-syntax.git", "509.1.1"..<"602.0.0"),
+    .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.6.2"),
     .package(url: "https://github.com/pointfreeco/swift-parsing.git", from: "0.14.1"),
-    .package(url: "https://github.com/nekrich/Yams.git", branch: "main")
+    .package(url: "https://github.com/jpsim/Yams.git", from: "6.2.0")
 ])
 package.targets.append(contentsOf: [
-    // Core Module
+    // Parsing
     .target(
-        name: "ConfidentialCore",
-        dependencies: [
-            "ConfidentialKit",
-            "ConfidentialUtils",
-            .product(name: "SwiftSyntaxBuilder", package: "swift-syntax"),
-            .product(name: "Parsing", package: "swift-parsing")
-        ]
-    ),
-
-    // Obfuscator
-    .target(
-        name: "ConfidentialObfuscator",
+        name: "ConfidentialParsing",
         dependencies: [
             "ConfidentialCore",
-            .product(name: "Yams", package: "Yams"),
-            .product(name: "Parsing", package: "swift-parsing")
+            "ConfidentialUtils",
+            .product(name: "SwiftSyntaxBuilder", package: "swift-syntax"),
+            .product(name: "Parsing", package: "swift-parsing"),
+            .product(name: "Yams", package: "Yams")
         ]
     ),
 
@@ -80,15 +105,23 @@ package.targets.append(contentsOf: [
     .executableTarget(
         name: "swift-confidential",
         dependencies: [
-            "ConfidentialObfuscator",
+            "ConfidentialParsing",
             .product(name: "ArgumentParser", package: "swift-argument-parser")
+        ]
+    ),
+
+    // Obfuscator
+    .target(
+        name: "ConfidentialObfuscator",
+        dependencies: [
+            "ConfidentialParsing",
         ]
     ),
 
     // Tests
     .testTarget(
-        name: "ConfidentialCoreTests",
-        dependencies: ["ConfidentialCore"]
+        name: "ConfidentialParsingTests",
+        dependencies: ["ConfidentialParsing"]
     ),
     .testTarget(
         name: "ConfidentialObfuscatorTests",

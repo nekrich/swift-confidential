@@ -1,7 +1,5 @@
-import ConfidentialCore
+import ConfidentialParsing
 import Foundation
-import Parsing
-import Yams
 
 /// Obfuscates a source file based on a configuration.
 public enum ConfidentialObfuscator {
@@ -12,16 +10,9 @@ public enum ConfidentialObfuscator {
     /// - Returns: A string with obfuscated source code.
     /// - Throws: An error if the configuration is invalid or the obfuscation fails.
     public static func obfuscate(configurationData: Data) throws -> String {
-        let configuration: Configuration = try YAMLDecoder().decode(Configuration.self, from: configurationData)
+        let sourceFileText: SourceFileText = try ConfidentialParser()
+            .parse(configurationData)
 
-        var sourceFileSpec: SourceFileSpec = try Parsing.Parsers.ModelTransform.SourceFileSpec()
-            .parse(configuration)
-
-        try SourceObfuscator().obfuscate(&sourceFileSpec)
-
-        let sourceFileText: SourceFileText = try Parsing.Parsers.CodeGeneration.SourceFile()
-            .parse(&sourceFileSpec)
-
-        return sourceFileText.text()
+        return sourceFileText.description
     }
 }
