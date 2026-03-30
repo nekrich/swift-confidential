@@ -20,14 +20,16 @@ var package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/swiftlang/swift-syntax.git", "600.0.1"..<"604.0.0")
+        .package(url: "https://github.com/swiftlang/swift-syntax.git", "600.0.1"..<"604.0.0"),
+        .package(url: "https://github.com/apple/swift-crypto.git", from: "4.3.0"),
     ],
     targets: [
         // Core Module
         .target(
             name: "ConfidentialCore",
             dependencies: [
-                "ConfidentialUtils"
+                "ConfidentialUtils",
+                .productItem(name: "Crypto", package: "swift-crypto", moduleAliases: ["Crypto" : "CryptoKit"], condition: .when(platforms: [.linux]))
             ]
         ),
 
