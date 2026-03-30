@@ -1,5 +1,9 @@
 import ConfidentialUtils
+#if os(Linux)
+import Crypto
+#else
 import CryptoKit
+#endif
 import Foundation
 
 public extension Obfuscation.Encryption {

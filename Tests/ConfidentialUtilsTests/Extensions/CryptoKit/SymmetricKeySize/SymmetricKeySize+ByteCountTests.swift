@@ -1,7 +1,11 @@
 @testable import ConfidentialUtils
 import XCTest
 
+#if os(Linux)
+import Crypto
+#else
 import CryptoKit
+#endif
 
 final class SymmetricKeySize_ByteCountTests: XCTestCase {
 

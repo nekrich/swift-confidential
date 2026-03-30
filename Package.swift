@@ -56,7 +56,7 @@ var package = Package(
         .target(
             name: "ConfidentialUtils",
             dependencies: [
-                .productItem(name: "Crypto", package: "swift-crypto", moduleAliases: ["Crypto" : "CryptoKit"], condition: .when(platforms: [.linux]))
+                .product(name: "Crypto", package: "swift-crypto", condition: .when(platforms: [.linux]))
             ]
         ),
 

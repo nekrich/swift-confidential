@@ -1,5 +1,9 @@
 import ConfidentialCore
+#if os(Linux)
+import Crypto
+#else
 import CryptoKit
+#endif
 import Foundation
 
 extension Obfuscation.Encryption.DataCrypter: DataObfuscationStep {

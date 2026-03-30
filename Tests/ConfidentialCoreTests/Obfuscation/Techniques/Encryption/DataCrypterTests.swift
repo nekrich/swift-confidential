@@ -1,7 +1,11 @@
 @testable import ConfidentialCore
 import XCTest
 
+#if os(Linux)
+import Crypto
+#else
 import CryptoKit
+#endif
 
 final class DataCrypterTests: XCTestCase {
 
