@@ -1,5 +1,7 @@
 import Foundation
 
+#if os(Linux)
+#else
 package extension NSData.CompressionAlgorithm {
 
     /// The number of bytes in the header magic number.
@@ -38,3 +40,4 @@ package extension NSData.CompressionAlgorithm {
         }
     }
 }
+#endif
