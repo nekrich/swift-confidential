@@ -28,8 +28,7 @@ var package = Package(
         .target(
             name: "ConfidentialCore",
             dependencies: [
-                "ConfidentialUtils",
-                .productItem(name: "Crypto", package: "swift-crypto", moduleAliases: ["Crypto" : "CryptoKit"], condition: .none)
+                "ConfidentialUtils"
             ]
         ),
 
@@ -54,7 +53,12 @@ var package = Package(
         ),
 
         // Utils
-        .target(name: "ConfidentialUtils"),
+        .target(
+            name: "ConfidentialUtils",
+            dependencies: [
+                .productItem(name: "Crypto", package: "swift-crypto", moduleAliases: ["Crypto" : "CryptoKit"], condition: .when(platforms: [.linux]))
+            ]
+        ),
 
         // Tests
         .testTarget(
