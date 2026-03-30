@@ -29,7 +29,7 @@ var package = Package(
             name: "ConfidentialCore",
             dependencies: [
                 "ConfidentialUtils",
-                .productItem(name: "Crypto", package: "swift-crypto", moduleAliases: ["Crypto" : "CryptoKit"], condition: .when(platforms: [.linux]))
+                .productItem(name: "Crypto", package: "swift-crypto", moduleAliases: ["Crypto" : "CryptoKit"], condition: .none)
             ]
         ),
 
